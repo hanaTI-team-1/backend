@@ -2,7 +2,7 @@
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="kr.ac.kopo.jeonse.test.mapper.TestMapper">
+<mapper namespace="kr.ac.kopo.jeonse.domain.test.mapper.TestMapper">
     <select id="test" resultType="int">
         SELECT count(1) FROM BJD_CODE
     </select>

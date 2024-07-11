@@ -1,8 +1,8 @@
-package kr.ac.kopo.jeonse.test.controller;
+package kr.ac.kopo.jeonse.domain.test.controller;
 
+import kr.ac.kopo.jeonse.domain.test.service.TestService;
 import kr.ac.kopo.jeonse.global.payload.ApiResponse;
 import kr.ac.kopo.jeonse.global.payload.code.status.ErrorStatus;
-import kr.ac.kopo.jeonse.test.service.TestService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;

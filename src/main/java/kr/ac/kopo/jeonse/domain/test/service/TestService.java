@@ -1,6 +1,6 @@
-package kr.ac.kopo.jeonse.test.service;
+package kr.ac.kopo.jeonse.domain.test.service;
 
-import kr.ac.kopo.jeonse.test.mapper.TestMapper;
+import kr.ac.kopo.jeonse.domain.test.mapper.TestMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

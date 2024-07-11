@@ -1,4 +1,4 @@
-package kr.ac.kopo.jeonse.test.mapper;
+package kr.ac.kopo.jeonse.domain.test.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 
