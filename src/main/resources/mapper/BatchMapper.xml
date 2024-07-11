@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.ac.kopo.jeonse.domain.batch.mapper.BatchMapper">
+    <select id="deleteAllJeonse" resultType="int">
+        delete from naver_real_estate
+    </select>
+
+    <insert id="updateJeonse" parameterType="java.util.List">
+        INSERT INTO naver_real_estate (
+        atclNo, cortarNo, atclNm, atclStatCd, rletTpCd, uprRletTpCd, rletTpNm, tradTpCd, tradTpNm,
+        vrfcTpCd, flrInfo, prc, rentPrc, hanPrc, spc1, spc2, direction, atclCfmYmd, repImgUrl,
+        repImgTpCd, repImgThumb, lat, lng, atclFetrDesc, tag1, tag2, tag3, bildNm, minute,
+        sameAddrCnt, sameAddrDirectCnt, cpid, cpNm, cpCnt, rltrNm, sellrNm, directTradYn,
+        minMviFee, maxMviFee, etRoomCnt, tradePriceHan, tradeRentPrice, tradeCheckedByOwner,
+        cpLinkVO, dtlAddrYn, dtlAddr, address
+        )
+        <foreach collection="list" item="item" separator=" UNION ALL ">
+            SELECT
+            #{item.atclNo}, #{item.cortarNo}, #{item.atclNm}, #{item.atclStatCd}, #{item.rletTpCd},
+            #{item.uprRletTpCd}, #{item.rletTpNm}, #{item.tradTpCd}, #{item.tradTpNm}, #{item.vrfcTpCd},
+            #{item.flrInfo}, #{item.prc}, #{item.rentPrc}, #{item.hanPrc}, #{item.spc1}, #{item.spc2},
+            #{item.direction}, #{item.atclCfmYmd}, #{item.repImgUrl}, #{item.repImgTpCd}, #{item.repImgThumb},
+            #{item.lat}, #{item.lng}, #{item.atclFetrDesc}, #{item.tag1}, #{item.tag2}, #{item.tag3},
+            #{item.bildNm}, #{item.minute}, #{item.sameAddrCnt}, #{item.sameAddrDirectCnt}, #{item.cpid},
+            #{item.cpNm}, #{item.cpCnt}, #{item.rltrNm}, #{item.sellrNm}, #{item.directTradYn}, #{item.minMviFee},
+            #{item.maxMviFee}, #{item.etRoomCnt}, #{item.tradePriceHan}, #{item.tradeRentPrice}, #{item.tradeCheckedByOwner},
+            #{item.cpLinkVO}, #{item.dtlAddrYn}, #{item.dtlAddr}, #{item.address}
+            FROM DUAL
+        </foreach>
+    </insert>
+
+</mapper>

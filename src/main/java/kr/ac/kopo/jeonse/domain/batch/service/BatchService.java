@@ -1,18 +1,14 @@
 package kr.ac.kopo.jeonse.domain.batch.service;
 
+import kr.ac.kopo.jeonse.domain.batch.mapper.BatchMapper;
 import kr.ac.kopo.jeonse.domain.batch.vo.CrawlingVO;
 import kr.ac.kopo.jeonse.domain.jeonse.domain.Jeonse;
 import kr.ac.kopo.jeonse.global.geo.service.GeoLocationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,14 +17,19 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BatchService {
     private final GeoLocationService geoLocationService;
+    private final BatchMapper batchMapper;
 
+    @Transactional(rollbackFor = Exception.class)
     public String updateJeonse(List<CrawlingVO> crawlingVO) {
+        batchMapper.deleteAllJeonse();
         ArrayList<Jeonse> jeonseList = new ArrayList<>();
         for(CrawlingVO crawling : crawlingVO){
-            jeonseList.add(crawling.convertToJeonse(crawling));
-//            geoLocationService.
+            Jeonse jeonse = crawling.convertToJeonse(crawling);
+            jeonse.setAddress(geoLocationService.getLoadNameAddress(crawling.getLat(), crawling.getLng()));
+            jeonseList.add(jeonse);
         }
-        log.info("jeonseList : {}", jeonseList);
+        batchMapper.updateJeonse(jeonseList);
+//        log.info("jeonseList : {}", jeonseList);
         return null;
     }
 
