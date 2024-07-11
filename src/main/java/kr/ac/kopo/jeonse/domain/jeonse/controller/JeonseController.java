@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
+
+import java.util.Map;
 
 import javax.ws.rs.QueryParam;
 import java.util.List;
@@ -20,19 +23,22 @@ public class JeonseController {
 
     private final JeonseService jeonseService;
 
-//    @GetMapping("/{atclNo}")
-//    public Jeonse getJeonse(@PathVariable String atclNo) {
-//        return jeonseService.getJeonseByAtclNo(atclNo);
-//    }
-//
-//    @GetMapping("/rate/{atclNo}")
-//    public double getJeonseRate(@PathVariable String atclNo) {
-//        return jeonseService.calculateJeonseRate(atclNo);
-//    }
+    @GetMapping("/{atclNo}")
+    public Jeonse getJeonse(@PathVariable String atclNo) {
+        return jeonseService.getJeonseByAtclNo(atclNo);
+    }
+
+    @GetMapping("/rate/{atclNo}")
+    public double getJeonseRate(@PathVariable String atclNo) {
+        return jeonseService.calculateJeonseRate(atclNo);
+    }
+
 
     @GetMapping("/remain")
     public ApiResponse<?> getRemainJeonse(@QueryParam("address") String address, @QueryParam("aptName") String aptName) {
         return ApiResponse.onSuccess(jeonseService.getRemainJeonse(address, aptName));
     }
+
+
 }
 
