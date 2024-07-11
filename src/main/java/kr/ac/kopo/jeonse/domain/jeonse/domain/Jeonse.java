@@ -36,7 +36,7 @@ public class Jeonse {
     private String tag2;
     private String tag3;
     private String bildNm;
-    private int minute;
+    private String minute;
     private int sameAddrCnt;
     private int sameAddrDirectCnt;
     private String cpid;
@@ -50,7 +50,7 @@ public class Jeonse {
     private int etRoomCnt;
     private String tradePriceHan;
     private int tradeRentPrice;
-    private boolean tradeCheckedByOwner;
+    private String tradeCheckedByOwner;
     private String cpLinkVO;
     private String dtlAddrYn;
     private String dtlAddr;

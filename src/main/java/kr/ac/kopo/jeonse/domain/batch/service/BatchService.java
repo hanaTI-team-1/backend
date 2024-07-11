@@ -19,7 +19,6 @@ public class BatchService {
     private final GeoLocationService geoLocationService;
     private final BatchMapper batchMapper;
 
-    @Transactional(rollbackFor = Exception.class)
     public String updateJeonse(List<CrawlingVO> crawlingVO) {
         batchMapper.deleteAllJeonse();
         ArrayList<Jeonse> jeonseList = new ArrayList<>();

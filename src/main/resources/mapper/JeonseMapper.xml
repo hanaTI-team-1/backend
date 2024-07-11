@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.ac.kopo.jeonse.domain.jeonse.mapper.JeonseMapper">
+    <select id="selectRemainJeonse" resultType="kr.ac.kopo.jeonse.domain.jeonse.domain.Jeonse">
+        SELECT * FROM naver_real_estate
+        WHERE address = #{address} and
+        atclnm = #{aptName}
+    </select>
+
+</mapper>
