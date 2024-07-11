@@ -5,6 +5,8 @@ import kr.ac.kopo.jeonse.domain.jeonse.mapper.JeonseMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class JeonseService {
 
@@ -22,6 +24,9 @@ public class JeonseService {
         } else {
             throw new IllegalArgumentException("Invalid article number or price.");
         }
+    }
+    public List<Jeonse> getRemainJeonse(String address, String aptName) {
+        return jeonseMapper.selectRemainJeonse(address, aptName);
     }
 }
 
