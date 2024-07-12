@@ -12,11 +12,10 @@ jobs:
       - name: Run shell script on remote server to stop service and move file to archive
         uses: appleboy/ssh-action@master
         with:
-          host: 34.64.201.85
-          port: 22
-          username: vincentkim0503
+          host: ${{ secrets.SSH_HOST }}
+          port: ${{ secrets.SSH_PORT }}
+          username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-#          password: ${{ secrets.SSH_PASSWORD }}
           script: |
             whoami
 
@@ -26,40 +25,9 @@ jobs:
 #        with:
 #          java-version: 17
 
-#      - uses: actions/checkout@v3
-#      - name: Build vue project
-#        working-directory: ./frontend
-#        run: |
-#          npm install
-#          npm run build -- --dest ../backend/src/main/resources/static
 
 #      - name: Maven package
 #        run: |
 #          mvn package -DskipTests
 
-      # - name: List files after maven package
-      #   run: |
-      #     ls -alR ${{ github.workspace }}/backend/target
 
-#      - name: Deploy file to server
-#        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
-#        with:
-#          username: vraptor
-#          server: 175.196.170.100
-#          port: 10022
-#          ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
-#          local_path: './backend/target/*.jar'
-#          remote_path: '/home/vraptor/teruteru'
-#          sftp_only: true
-#          password: vraptor
-
-#      - name: Run shell script on remote server to start service
-#        uses: appleboy/ssh-action@master
-#        with:
-#          host: 175.196.170.100
-#          port: 10022
-#          username: vraptor
-#          password: ${{ secrets.SSH_PASSWORD }}
-#          script: |
-#            cd teruteru
-#            ./after_deploy.sh
