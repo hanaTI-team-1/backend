@@ -17,7 +17,7 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            whoami
+            echo "test" > test.txt
 
 #      - uses: actions/checkout@v3
 #      - name: Setup Java 17
