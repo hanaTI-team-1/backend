@@ -17,8 +17,7 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd backend
-            ./before_deploy.sh
+            sh /home/vincentkim0503/backend/before_deploy.sh
 
       # Set up JDK 17
       - uses: actions/checkout@v3
@@ -53,7 +52,6 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd backend
-            ./after_deploy.sh
+            sh /home/vincentkim0503/backend/after_deploy.sh
 
 
