@@ -39,7 +39,7 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           server: ${{ secrets.SSH_HOST }}
           port: ${{ secrets.SSH_PORT }}
-          ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
+          ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY_PEM }}
           local_path: target/*.jar
           remote_path: /home/vincentkim0503
           sftp_only: true
