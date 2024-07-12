@@ -9,23 +9,22 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-#      - name: Run shell script on remote server to stop service and move file to archive
-#        uses: appleboy/ssh-action@master
-#        with:
-#          host: 175.196.170.100
-#          port: 10022
-#          username: vraptor
-#          # key: ${{ secrets.SSH_PRIVATE_KEY }}
-#          password: ${{ secrets.SSH_PASSWORD }}
-#          script: |
-#            cd teruteru
-#            ./before_deploy.sh
-
-      - uses: actions/checkout@v3
-      - name: Setup Java 17
-        uses: actions/setup-java@v1
+      - name: Run shell script on remote server to stop service and move file to archive
+        uses: appleboy/ssh-action@master
         with:
-          java-version: 17
+          host: 34.64.201.85
+          port: 22
+          username: vincentkim0503
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+#          password: ${{ secrets.SSH_PASSWORD }}
+          script: |
+            whoami
+
+#      - uses: actions/checkout@v3
+#      - name: Setup Java 17
+#        uses: actions/setup-java@v1
+#        with:
+#          java-version: 17
 
 #      - uses: actions/checkout@v3
 #      - name: Build vue project
@@ -34,10 +33,9 @@ jobs:
 #          npm install
 #          npm run build -- --dest ../backend/src/main/resources/static
 
-      - name: Maven package
-#        working-directory: ./backend
-        run: |
-          mvn package -DskipTests
+#      - name: Maven package
+#        run: |
+#          mvn package -DskipTests
 
       # - name: List files after maven package
       #   run: |
