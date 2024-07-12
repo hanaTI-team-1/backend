@@ -17,7 +17,8 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            echo "test" > test.txt
+            cd backend
+            ./before_deploy.sh
 
       # Set up JDK 17
       - uses: actions/checkout@v3
@@ -43,5 +44,16 @@ jobs:
           local_path: target/*.jar
           remote_path: /home/vincentkim0503
           sftp_only: true
+
+      - name: Run shell script on remote server to start service
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          port: ${{ secrets.SSH_PORT }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd backend
+            ./after_deploy.sh
 
 
