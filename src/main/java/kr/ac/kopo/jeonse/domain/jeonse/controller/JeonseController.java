@@ -4,17 +4,15 @@ import kr.ac.kopo.jeonse.domain.jeonse.domain.Jeonse;
 import kr.ac.kopo.jeonse.domain.jeonse.service.JeonseService;
 import kr.ac.kopo.jeonse.global.payload.ApiResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
 
 import javax.ws.rs.QueryParam;
-import java.util.List;
+import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
@@ -33,8 +31,21 @@ public class JeonseController {
         return jeonseService.calculateJeonseRate(atclNo);
     }
 
+    @PostMapping("/register-doc")
+    public ResponseEntity<ByteArrayResource> getRegisterDoc(@RequestParam String address) throws IOException {
+        ByteArrayResource registerDoc = jeonseService.getRegisterDoc(address);
+        if (registerDoc == null) {
+            return ResponseEntity.notFound().build();
+        }
 
-    @GetMapping("/remain")
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=output.pdf")
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .body(registerDoc);
+    }
+
+
+    @PostMapping("/remain")
     public ApiResponse<?> getRemainJeonse(@QueryParam("address") String address, @QueryParam("aptName") String aptName) {
         return ApiResponse.onSuccess(jeonseService.getRemainJeonse(address, aptName));
     }
