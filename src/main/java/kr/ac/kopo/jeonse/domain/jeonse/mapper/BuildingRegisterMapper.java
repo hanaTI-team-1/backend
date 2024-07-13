@@ -8,5 +8,5 @@ import java.util.List;
 
 @Mapper
 public interface BuildingRegisterMapper {
-    List<BuildingRegister> findBuildingRegisterByAddress(@Param("address") String address);
+    List<BuildingRegister> findBuildingRegisterByAddress(@Param("road_address") String roadAddress);
 }

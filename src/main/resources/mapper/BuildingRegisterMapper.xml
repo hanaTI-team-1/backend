@@ -4,6 +4,6 @@
 
 <mapper namespace="kr.ac.kopo.jeonse.domain.jeonse.mapper.BuildingRegisterMapper">
     <select id="findBuildingRegisterByAddress" resultType="kr.ac.kopo.jeonse.domain.jeonse.domain.BuildingRegister">
-        SELECT * FROM BUILDING_REGISTER WHERE ROAD_LAND_LOCATION LIKE '%${address}%'
+        SELECT * FROM BUILDING_REGISTER WHERE ROAD_LAND_LOCATION LIKE '%${road_address}%'
     </select>
 </mapper>
