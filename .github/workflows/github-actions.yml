@@ -1,0 +1,57 @@
+name: YEBANG CI/CD
+run-name: ${{ github.actor }} - ${{ github.event_name }}
+on:
+  push:
+    branches:
+      - main
+      -
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run shell script on remote server to stop service and move file to archive
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          port: ${{ secrets.SSH_PORT }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            sh /home/vincentkim0503/backend/before_deploy.sh
+
+      # Set up JDK 17
+      - uses: actions/checkout@v3
+      - name: Setup Java 17
+        uses: actions/setup-java@v1
+        with:
+          java-version: 17
+
+
+      # Build with Maven
+      - name: Maven package
+        run: |
+          mvn package -DskipTests
+
+      # Deploy to remote server
+      - name: Deploy to remote server
+        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
+        with:
+          username: ${{ secrets.SSH_USERNAME }}
+          server: ${{ secrets.SSH_HOST }}
+          port: ${{ secrets.SSH_PORT }}
+          ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY_PEM }}
+          local_path: target/*.jar
+          remote_path: /home/vincentkim0503
+          sftp_only: true
+
+      - name: Run shell script on remote server to start service
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          port: ${{ secrets.SSH_PORT }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            sh /home/vincentkim0503/backend/after_deploy.sh
+
+
