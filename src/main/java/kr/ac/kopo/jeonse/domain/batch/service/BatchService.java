@@ -20,7 +20,7 @@ public class BatchService {
     private final BatchMapper batchMapper;
 
     public String updateJeonse(List<CrawlingVO> crawlingVO) {
-        batchMapper.deleteAllJeonse();
+//        batchMapper.deleteAllJeonse();
         ArrayList<Jeonse> jeonseList = new ArrayList<>();
         for(CrawlingVO crawling : crawlingVO){
             Jeonse jeonse = crawling.convertToJeonse(crawling);
