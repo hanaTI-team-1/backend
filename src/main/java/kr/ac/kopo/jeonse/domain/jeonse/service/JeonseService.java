@@ -62,13 +62,14 @@ public class JeonseService {
     }
 
     public ByteArrayResource getRegisterDoc(String address) throws IOException {
+//        원본
 //        return getRegisterDocByIcId(getIcId(address));
 
 //        되는 거
 //        return getRegisterDocByIcId("3058724");
 
 //        안되는 거 (민재집)
-        return getRegisterDocByIcId("3059679");
+        return getRegisterDocByIcId("3059680");
     }
 
     private ByteArrayResource getRegisterDocByIcId(String icId) throws IOException {
