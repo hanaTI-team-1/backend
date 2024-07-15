@@ -13,8 +13,7 @@ public class BuildingRegisterService {
     private final BuildingRegisterMapper buildingRegisterMapper;
 
     public List<BuildingRegister> getBuildingRegisterByAddress(String roadAddress) {
-        // TODO 에러 핸들링 적용하기
-        if(roadAddress == null || roadAddress.isEmpty()) throw new RuntimeException("주소에 널 값이 들어옴");
+        if(roadAddress == null || roadAddress.isEmpty()) throw new RuntimeException("주소값은 필수 정보입니다.");
         return buildingRegisterMapper.findBuildingRegisterByAddress(roadAddress);
     }
 
