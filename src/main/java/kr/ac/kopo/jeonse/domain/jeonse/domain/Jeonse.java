@@ -1,7 +1,10 @@
 package kr.ac.kopo.jeonse.domain.jeonse.domain;
 
-import lombok.*;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Builder
@@ -56,3 +59,4 @@ public class Jeonse {
     private String dtlAddr;
     private String address;
 }
+

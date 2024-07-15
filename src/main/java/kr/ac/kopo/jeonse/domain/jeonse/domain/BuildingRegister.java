@@ -1,0 +1,90 @@
+package kr.ac.kopo.jeonse.domain.jeonse.domain;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class BuildingRegister {
+    private String registerPk;
+    private String registerCategoryCode;
+    private String registerCategoryName;
+    private String registerTypeCode;
+    private String registerTypeName;
+    private String landLocation;
+    private String roadLandLocation;
+    private String buildingName;
+    private String siGunguCode;
+    private String bJDongCode;
+    private String landCategoryCode;
+    private String bun;
+    private String ji;
+    private String specialLandName;
+    private String block;
+    private String lot;
+    private String outerArea;
+    private String newAddressRoadCode;
+    private String newAddressLegalCode;
+    private String newAddressAboveBelowCode;
+    private String newAddressMainNumber;
+    private String newAddressSubNumber;
+    private String dongName;
+    private String mainAttachCategoryCode;
+    private String mainAttachCategoryName;
+    private String landAreaSqm;
+    private String buildingAreaSqm;
+    private String buildingCoverageRatio;
+    private String totalFloorAreaSqm;
+    private String floorAreaRatioCalculationAreaSqm;
+    private String floorAreaRatio;
+    private String structureCode;
+    private String structureCodeName;
+    private String otherStructure;
+    private String mainUseCode;
+    private String mainUseCodeName;
+    private String otherUse;
+    private String roofCode;
+    private String roofCodeName;
+    private String otherRoof;
+    private String householdCount;
+    private String householdUnitCount;
+    private String heightM;
+    private String aboveGroundFloorCount;
+    private String undergroundFloorCount;
+    private String passengerElevatorCount;
+    private String emergencyElevatorCount;
+    private String subsidiaryBuildingCount;
+    private String subsidiaryBuildingAreaSqm;
+    private String totalBuildingFloorAreaSqm;
+    private String indoorMechanicalParkingCount;
+    private String indoorMechanicalParkingAreaSqm;
+    private String outdoorMechanicalParkingCount;
+    private String outdoorMechanicalParkingAreaSqm;
+    private String indoorSelfParkingCount;
+    private String indoorSelfParkingAreaSqm;
+    private String outdoorSelfParkingCount;
+    private String outdoorSelfParkingAreaSqm;
+    private String permitDate;
+    private String constructionStartDate;
+    private String usageApprovalDate;
+    private String permitNumberYear;
+    private String permitNumberAgencyCode;
+    private String permitNumberAgencyName;
+    private String permitNumberCategoryCode;
+    private String permitNumberCategoryName;
+    private String unitNumber;
+    private String energyEfficiencyGrade;
+    private String energySavingRatio;
+    private String energyEpiScore;
+    private String ecoFriendlyBuildingGrade;
+    private String ecoFriendlyBuildingScore;
+    private String intelligentBuildingGrade;
+    private String intelligentBuildingScore;
+    private String creationDate;
+    private String seismicDesignApplication;
+    private String seismicAbility;
+}

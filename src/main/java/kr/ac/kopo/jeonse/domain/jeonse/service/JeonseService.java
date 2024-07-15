@@ -4,6 +4,7 @@ package kr.ac.kopo.jeonse.domain.jeonse.service;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.ac.kopo.jeonse.domain.jeonse.domain.Jeonse;
+import kr.ac.kopo.jeonse.domain.jeonse.dto.JeonseRateDto;
 import kr.ac.kopo.jeonse.domain.jeonse.mapper.JeonseMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -43,19 +44,16 @@ public class JeonseService {
 
     private static final String REGISTER_API_IC = "https://apick.app/rest/iros/1";
     private static final String REGISTER_API_DOC = "https://apick.app/rest/iros_download/1";
+    private static final String EXTERNAL_API_URL = "https://apick.app/rest/iros/1";
 
     public Jeonse getJeonseByAtclNo(String atclNo) {
         return jeonseMapper.selectJeonseByAtclNo(atclNo);
     }
 
-    public double calculateJeonseRate(String atclNo) {
-        Jeonse jeonse = getJeonseByAtclNo(atclNo);
-        if (jeonse != null && jeonse.getPrc() > 0) {
-            return (double) jeonse.getRentPrc() / jeonse.getPrc() * 100;
-        } else {
-            throw new IllegalArgumentException("Invalid article number or price.");
-        }
+    public JeonseRateDto calculateJeonseRate(String atclNo) {
+        return jeonseMapper.findJeonseRateByAtclNo(atclNo);
     }
+
 
     public List<Jeonse> getRemainJeonse(String address, String aptName) {
         return jeonseMapper.selectRemainJeonse(address, aptName);

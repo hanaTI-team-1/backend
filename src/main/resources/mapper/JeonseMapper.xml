@@ -9,4 +9,30 @@
         atclnm = #{aptName}
     </select>
 
+    <select id="findJeonseRateByAtclNo" resultType="kr.ac.kopo.jeonse.domain.jeonse.dto.JeonseRateDto">
+        WITH TBL AS (select address
+                     from (SELECT address
+                           FROM NAVER_REAL_ESTATE
+                           WHERE ATCLNO = '${atclNo}')
+                     where ROWNUM = 1),
+             JEONSE AS (SELECT PRC
+                        FROM (SELECT *
+                              FROM NAVER_REAL_ESTATE
+                              WHERE ADDRESS = (select address from tbl)
+                                AND TRADTPNM = '전세'
+                              ORDER BY PRC)
+                        WHERE ROWNUM = 1),
+             MAEMAE AS (SELECT PRC
+                        FROM (SELECT *
+                              FROM NAVER_REAL_ESTATE
+                              WHERE ADDRESS = (select address from tbl)
+                                AND TRADTPNM = '매매'
+                              ORDER BY PRC)
+                        WHERE ROWNUM = 1)
+        SELECT (SELECT PRC FROM JEONSE) as jeonse_price,
+               (SELECT PRC FROM MAEMAE) as maemae_price,
+               TO_CHAR( (SELECT PRC FROM JEONSE) / (SELECT PRC FROM MAEMAE) * 100, 'FM99999999')  as rate
+        FROM DUAL
+    </select>
+
 </mapper>
