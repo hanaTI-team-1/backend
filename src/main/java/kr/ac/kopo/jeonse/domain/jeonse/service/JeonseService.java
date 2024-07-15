@@ -28,6 +28,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Service
@@ -53,18 +54,11 @@ public class JeonseService {
         return jeonseMapper.selectRemainJeonse(address, aptName);
     }
 
-    public ByteArrayResource getRegisterDoc(String address) throws IOException {
-//        원본
-//        return getRegisterDocByIcId(getIcId(address));
-
-//        되는 거
-//        return getRegisterDocByIcId("3058724");
-
-//        안되는 거 (민재집)
-        return getRegisterDocByIcId("3059680");
+    public ByteArrayResource getRegisterDoc(String address) throws IOException, InterruptedException {
+        return getRegisterDocByIcId(getIcId(address));
     }
 
-    private ByteArrayResource getRegisterDocByIcId(String icId) throws IOException {
+    private ByteArrayResource getRegisterDocByIcId(String icId) throws IOException, InterruptedException {
         CloseableHttpClient httpClient = HttpClients.createDefault();
         HttpPost uploadFile = new HttpPost(REGISTER_API_DOC);
         uploadFile.setHeader("CL_AUTH_KEY", API_KEY);
@@ -74,6 +68,9 @@ public class JeonseService {
 
         org.apache.http.HttpEntity multipart = builder.build();
         uploadFile.setEntity(multipart);
+
+        // wait 10 seconds
+        TimeUnit.SECONDS.sleep(10);
 
         CloseableHttpResponse response = httpClient.execute(uploadFile);
         org.apache.http.HttpEntity responseEntity = response.getEntity();

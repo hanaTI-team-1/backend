@@ -25,7 +25,7 @@ public class JeonseController {
     private final JeonseService jeonseService;
 
     @PostMapping("/register-doc")
-    public ResponseEntity<ByteArrayResource> getRegisterDoc(@RequestParam String address) throws IOException {
+    public ResponseEntity<ByteArrayResource> getRegisterDoc(@RequestParam String address) throws IOException, InterruptedException {
         ByteArrayResource registerDoc = jeonseService.getRegisterDoc(address);
         if (registerDoc == null) {
             return ResponseEntity.notFound().build();
