@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.ws.rs.QueryParam;
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,10 +30,10 @@ public class JeonseController {
     private final JeonseService jeonseService;
     private final BuildingRegisterService buildingRegisterService;
 
-    @GetMapping("/{atclNo}")
-    public Jeonse getJeonse(@PathVariable String atclNo) {
-        return jeonseService.getJeonseByAtclNo(atclNo);
-    }
+//    @GetMapping("/{atclNo}")
+//    public Jeonse getJeonse(@PathVariable String atclNo) {
+//        return jeonseService.getJeonseByAtclNo(atclNo);
+//    }
 
     @PostMapping("/register-doc")
     public ResponseEntity<ByteArrayResource> getRegisterDoc(@RequestParam String address) throws IOException {
@@ -54,8 +55,8 @@ public class JeonseController {
     }
 
     @GetMapping("/building-register")
-    public ApiResponse<List<BuildingRegister>> getBuildingRegister(@QueryParam("road_address") String road_address) {
-        return ApiResponse.onSuccess(buildingRegisterService.getBuildingRegisterByAddress(road_address));
+    public ApiResponse<List<BuildingRegister>> getBuildingRegister(@QueryParam("road_address") String roadAddress) {
+        return ApiResponse.onSuccess(buildingRegisterService.getBuildingRegisterByAddress(roadAddress));
     }
 
     @GetMapping("/rate/{atclNo}")
