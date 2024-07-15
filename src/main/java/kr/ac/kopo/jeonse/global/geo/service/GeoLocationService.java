@@ -23,7 +23,7 @@ public class GeoLocationService {
         final String KAKAO_API_URL = "https://dapi.kakao.com/v2/local/geo/coord2address.json?x={0}&y={1}";
         String url = MessageFormat.format(KAKAO_API_URL, String.valueOf(lon), String.valueOf(lat));
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "KakaoAK 80edc5e368a1852e4a54b6e16d29e8d7");
+        headers.set("Authorization", "KakaoAK 05605d63db818c85ac75264827261f46");
         HttpEntity<String> entity = new HttpEntity<>(headers);
         ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
 //        log.info("url : {}", url);

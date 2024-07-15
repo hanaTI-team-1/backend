@@ -1,5 +1,6 @@
 package kr.ac.kopo.jeonse.domain.jeonse.controller;
 
+import kr.ac.kopo.jeonse.domain.jeonse.dto.InfraDTO;
 import kr.ac.kopo.jeonse.domain.jeonse.dto.JeonseCheckList;
 import kr.ac.kopo.jeonse.domain.jeonse.service.JeonseService;
 import kr.ac.kopo.jeonse.global.payload.ApiResponse;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.ws.rs.QueryParam;
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -47,5 +49,11 @@ public class JeonseController {
     public ApiResponse<JeonseCheckList> jeonseCheckList(@QueryParam("actlNo") String actlNo) {
         return ApiResponse.onSuccess(jeonseService.checkJeonse(actlNo));
     }
+
+    @GetMapping("/infra-list")
+    public ApiResponse<List<InfraDTO>> infraList() {
+        return ApiResponse.onSuccess(jeonseService.getInfraList());
+    }
+
 
 }

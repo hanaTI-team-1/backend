@@ -40,4 +40,33 @@
         FROM DUAL
     </select>
 
+    <select id="getBusStops" resultType="kr.ac.kopo.jeonse.domain.jeonse.domain.BusStop">
+        SELECT title, latitude, longitude
+        FROM BUS_STOP_location
+        WHERE ADDRESS like '%${gu}%'
+    </select>
+
+    <select id="getGroceries" resultType="kr.ac.kopo.jeonse.domain.jeonse.domain.Grocery">
+        SELECT business_name, latitude, longitude
+        FROM grocery_store
+        WHERE location_ADDRESS like '%${gu}%'
+    </select>
+
+    <select id="getPoliceStations" resultType="kr.ac.kopo.jeonse.domain.jeonse.domain.PoliceStation">
+        SELECT name, gubun, latitude, longitude
+        FROM police_station
+        WHERE ADDRESS like '%${gu}%'
+    </select>
+
+    <select id="getSchools" resultType="kr.ac.kopo.jeonse.domain.jeonse.domain.School">
+        SELECT school_name, latitude, longitude
+        FROM school
+        WHERE location_address_road like '%${gu}%'
+    </select>
+
+    <select id="getPrimeRate" resultType="float">
+        SELECT ROUND((arrest / occur) * 100, 3) AS arrest_rate
+        FROM crime_rate
+        WHERE gu like '%${gu}%'
+    </select>
 </mapper>
