@@ -38,9 +38,32 @@ public class JeonseCheckList {
         private String licensedRealEstateAgent;
     }
 
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class AppropriateJeonsePrice{
+        private boolean success;
+        private int jeonsePrice;
+        private InfrastructureNum infrastructureNum;
+
+        @Data
+        @Builder
+        @AllArgsConstructor
+        @NoArgsConstructor
+        public static class InfrastructureNum{
+            private int school;
+            private int publicSecurity;
+            private int busStop;
+            private int subway;
+            private int mart;
+        }
+    }
+
     Jeonse jeonse;
     JeonseRate jeonseRate;
     BuilderLedger builderLedger;
     CertifiedRealEstateAgent certifiedRealEstateAgent;
+    AppropriateJeonsePrice appropriateJeonsePrice;
 
 }
