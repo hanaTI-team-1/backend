@@ -1,9 +1,6 @@
 package kr.ac.kopo.jeonse.domain.jeonse.controller;
 
-import kr.ac.kopo.jeonse.domain.jeonse.domain.BuildingRegister;
-import kr.ac.kopo.jeonse.domain.jeonse.domain.Jeonse;
-import kr.ac.kopo.jeonse.domain.jeonse.dto.JeonseRateDto;
-import kr.ac.kopo.jeonse.domain.jeonse.service.BuildingRegisterService;
+import kr.ac.kopo.jeonse.domain.jeonse.dto.JeonseCheckList;
 import kr.ac.kopo.jeonse.domain.jeonse.service.JeonseService;
 import kr.ac.kopo.jeonse.global.payload.ApiResponse;
 import lombok.RequiredArgsConstructor;
@@ -14,13 +11,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.ws.rs.QueryParam;
 import java.io.IOException;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,15 +23,9 @@ import java.util.List;
 public class JeonseController {
 
     private final JeonseService jeonseService;
-    private final BuildingRegisterService buildingRegisterService;
-
-//    @GetMapping("/{atclNo}")
-//    public Jeonse getJeonse(@PathVariable String atclNo) {
-//        return jeonseService.getJeonseByAtclNo(atclNo);
-//    }
 
     @PostMapping("/register-doc")
-    public ResponseEntity<ByteArrayResource> getRegisterDoc(@RequestParam String address) throws IOException {
+    public ResponseEntity<ByteArrayResource> getRegisterDoc(@RequestParam String address) throws IOException, InterruptedException {
         ByteArrayResource registerDoc = jeonseService.getRegisterDoc(address);
         if (registerDoc == null) {
             return ResponseEntity.notFound().build();
@@ -54,15 +43,9 @@ public class JeonseController {
         return ApiResponse.onSuccess(jeonseService.getRemainJeonse(address, aptName));
     }
 
-    @GetMapping("/building-register")
-    public ApiResponse<List<BuildingRegister>> getBuildingRegister(@QueryParam("road_address") String roadAddress) {
-        return ApiResponse.onSuccess(buildingRegisterService.getBuildingRegisterByAddress(roadAddress));
-    }
-
-    @GetMapping("/rate/{atclNo}")
-    public ApiResponse<JeonseRateDto> getJeonseRate(@PathVariable String atclNo) {
-        System.out.println(atclNo);
-        return ApiResponse.onSuccess(jeonseService.calculateJeonseRate(atclNo));
+    @GetMapping("/check-list")
+    public ApiResponse<JeonseCheckList> jeonseCheckList(@QueryParam("actlNo") String actlNo) {
+        return ApiResponse.onSuccess(jeonseService.checkJeonse(actlNo));
     }
 
 }
