@@ -320,9 +320,9 @@ public class JeonseService {
     }
 
     public List<JeonseCheckList> recommendJeonse(RecommendRequest recommendRequest) {
-//        String[] atclNos = getRecommendationList(recommendRequest);
+        String[] atclNos = getRecommendationList(recommendRequest);
 
-        String[] atclNos = {"2430006535", "2433524070", "2433775697", "2434392198", "2431314046", "2429677439", "2432722911", "2430296803", "2433186783"};
+//        String[] atclNos = {"2430006535", "2433524070", "2433775697", "2434392198", "2431314046", "2429677439", "2432722911", "2430296803", "2433186783"};
 
         List<JeonseCheckList> recommendList = new ArrayList<>();
 
@@ -366,4 +366,3 @@ public class JeonseService {
         return jeonseMapper.getJeonseList(address);
     }
 }
-
