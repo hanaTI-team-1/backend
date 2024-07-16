@@ -57,7 +57,7 @@ public class JeonseController {
         return ApiResponse.onSuccess(jeonseService.getInfraList());
     }
 
-    @GetMapping("/recommend")
+    @PostMapping("/recommend")
     public ApiResponse<List<JeonseCheckList>> recommend(@RequestBody RecommendRequest recommendRequest) {
         return ApiResponse.onSuccess(jeonseService.recommendJeonse(recommendRequest));
     }
