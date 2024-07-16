@@ -361,5 +361,9 @@ public class JeonseService {
 
         return response.getBody();
     }
+
+    public List<Jeonse> getAddressList(String address) {
+        return jeonseMapper.getJeonseList(address);
+    }
 }
 

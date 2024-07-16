@@ -26,5 +26,7 @@ public interface JeonseMapper {
     List<School> getSchools(@Param("gu") String gu);
 
     float getPrimeRate(@Param("gu") String gu);
+
+    List<Jeonse> getJeonseList(String address);
 }
 
