@@ -9,7 +9,7 @@ import kr.ac.kopo.jeonse.domain.jeonse.dto.JeonseCheckList;
 import kr.ac.kopo.jeonse.domain.jeonse.dto.JeonseRateDto;
 import kr.ac.kopo.jeonse.domain.jeonse.mapper.BuildingRegisterMapper;
 import kr.ac.kopo.jeonse.domain.jeonse.mapper.JeonseMapper;
-import kr.ac.kopo.jeonse.global.geo.service.GeoLocationService;
+import kr.ac.kopo.jeonse.global.utils.NullToEmptyStringUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -20,6 +20,7 @@ import org.apache.http.impl.client.HttpClients;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -39,7 +40,7 @@ public class JeonseService {
     private final JeonseMapper jeonseMapper;
     private final BuildingRegisterMapper buildingRegisterMapper;
     private final RestTemplate restTemplate;
-    private final GeoLocationService geoLocationService;
+    private final NullToEmptyStringUtil nullToEmptyStringUtil;
 
     private static final String API_KEY = "65cc914ef40df38979142db76be2b32f";
 
@@ -134,6 +135,8 @@ public class JeonseService {
             }
             buildingRegisterInfo = "주요 용도: " + tmp.getMainUseCodeName() + " | 기타 용도: " + tmp.getOtherUse();
         }
+        AppropriateJeonse appropriateJeonsePrice = getAppropriateJeonsePrice(jeonse);
+
 
         return JeonseCheckList.builder()
                 .jeonse(jeonse)
@@ -146,21 +149,73 @@ public class JeonseService {
                         .information(buildingRegisterInfo)
                         .build())
                 .appropriateJeonsePrice(JeonseCheckList.AppropriateJeonsePrice.builder()
-                        .success(true)
-                        .jeonsePrice(100000000)
+                        .success(jeonse.getPrc() < appropriateJeonsePrice.getJeonsePrice())
+                        .jeonsePrice(appropriateJeonsePrice.getJeonsePrice())
                         .infrastructureNum(JeonseCheckList.AppropriateJeonsePrice.InfrastructureNum.builder()
-                                .school(5)
-                                .publicSecurity(3)
-                                .busStop(13)
-                                .subway(2)
-                                .mart(2)
+                                .school(appropriateJeonsePrice.getInfrastructureNum().getSchool())
+                                .publicSecurity(appropriateJeonsePrice.getInfrastructureNum().getPublicSecurity())
+                                .busStop(appropriateJeonsePrice.getInfrastructureNum().getBusStop())
+                                .subway(appropriateJeonsePrice.getInfrastructureNum().getSubway())
+                                .mart(appropriateJeonsePrice.getInfrastructureNum().getMart())
                                 .build())
                         .build())
-                .certifiedRealEstateAgent(JeonseCheckList.CertifiedRealEstateAgent.builder()
-                        .success(true)
-                        .licensedRealEstateAgent(jeonse.getRltrNm())
+                        .certifiedRealEstateAgent(JeonseCheckList.CertifiedRealEstateAgent.builder()
+                                .success(true)
+                                .licensedRealEstateAgent(jeonse.getRltrNm())
+                                .build())
+                        .build();
+    }
+
+    private AppropriateJeonse getAppropriateJeonsePrice(Jeonse jeonse) {
+        final String FLASK_API_URL = "http://34.64.201.85:5000/run-a";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Content-Type", "application/json");
+
+        HttpEntity<Jeonse> entity = new HttpEntity<>(transformJeonse(jeonse), headers);
+
+        ResponseEntity<String> response = restTemplate.exchange(FLASK_API_URL, HttpMethod.POST, entity, String.class);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode root = null;
+        try {
+            root = objectMapper.readTree(response.getBody());
+        } catch (IOException e) {
+            log.error("Error occurred while parsing JSON response", e);
+        }
+        return AppropriateJeonse.builder()
+                .jeonsePrice(root.path("jeonsePrice").asInt())
+                .infrastructureNum(AppropriateJeonse.InfrastructureNum.builder()
+                        .school(root.path("infrastructureScore").path("school").asInt())
+                        .publicSecurity(root.path("infrastructureScore").path("publicSecurity").asInt())
+                        .busStop(root.path("infrastructureScore").path("busStop").asInt())
+                        .subway(root.path("infrastructureScore").path("subway").asInt())
+                        .mart(root.path("infrastructureScore").path("mart").asInt())
                         .build())
                 .build();
+    }
+
+    private Jeonse transformJeonse(Jeonse jeonse) {
+        nullToEmptyStringUtil.replaceNullsWithEmptyStrings(jeonse);
+
+        String tmp = jeonse.getFlrInfo();
+        String[] flrInfo = tmp.split("/");
+        if (flrInfo.length == 1) {
+            jeonse.setFlrInfo(flrInfo[0]);
+        } else {
+            String firstValue = flrInfo[0];
+            int secondValue = Integer.parseInt(flrInfo[1]);
+            int calculatedFloor = switch (firstValue) {
+                case "저" -> (int) Math.round(secondValue / 3.0);
+                case "중" -> (int) Math.round(2 * secondValue / 3.0);
+                case "고" -> secondValue;
+                default -> Integer.parseInt(String.valueOf(firstValue.toCharArray()[1])) * -1;
+            };
+
+            jeonse.setFlrInfo(String.valueOf(calculatedFloor));
+        }
+
+        return jeonse;
     }
 
     private String parseAddress(String address) {
