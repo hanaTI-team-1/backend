@@ -9,6 +9,11 @@
         atclnm = #{aptName}
     </select>
 
+    <select id="getJeonseList" resultType="kr.ac.kopo.jeonse.domain.jeonse.domain.Jeonse">
+        SELECT * FROM naver_real_estate
+        WHERE address like '%${address}%'
+    </select>
+
     <select id="selectJeonseByAtclNo" resultType="kr.ac.kopo.jeonse.domain.jeonse.domain.Jeonse">
         SELECT * FROM naver_real_estate
         WHERE atclno = #{atclNo}

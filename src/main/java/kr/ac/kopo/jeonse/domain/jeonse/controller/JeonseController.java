@@ -1,5 +1,6 @@
 package kr.ac.kopo.jeonse.domain.jeonse.controller;
 
+import kr.ac.kopo.jeonse.domain.jeonse.domain.Jeonse;
 import kr.ac.kopo.jeonse.domain.jeonse.dto.InfraDTO;
 import kr.ac.kopo.jeonse.domain.jeonse.dto.JeonseCheckList;
 import kr.ac.kopo.jeonse.domain.jeonse.dto.RecommendRequest;
@@ -59,6 +60,11 @@ public class JeonseController {
     @GetMapping("/recommend")
     public ApiResponse<List<JeonseCheckList>> recommend(@RequestBody RecommendRequest recommendRequest) {
         return ApiResponse.onSuccess(jeonseService.recommendJeonse(recommendRequest));
+    }
+
+    @GetMapping("/address")
+    public ApiResponse<List<Jeonse>> getAddressList(@QueryParam("address") String address) {
+        return ApiResponse.onSuccess(jeonseService.getAddressList(address));
     }
 
 
