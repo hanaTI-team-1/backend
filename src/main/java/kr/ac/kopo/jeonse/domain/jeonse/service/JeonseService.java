@@ -126,10 +126,10 @@ public class JeonseService {
         if(jeonseRateDto.getJeonsePrice() == null) {
             jeonseRateDto.setJeonsePrice("0");
         }
-//
-//        if (jeonseRateDto.getRate() == null) {
-//            jeonseRateDto.setRate("90");
-//        }
+
+        if (jeonseRateDto.getRate() == null) {
+            jeonseRateDto.setRate("90");
+        }
 
         List<BuildingRegister> buildingRegister = buildingRegisterMapper.findBuildingRegisterByAddress(parseAddress(jeonse.getAddress()));
 
@@ -182,8 +182,9 @@ public class JeonseService {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Content-Type", "application/json");
 
+        String flrInfo = jeonse.getFlrInfo();
 
-        Jeonse jeonse1 = transformJeonse(jeonse);
+//        Jeonse jeonse1 = transformJeonse(jeonse);
 
         HttpEntity<Jeonse> entity = new HttpEntity<>(transformJeonse(jeonse), headers);
 
@@ -196,6 +197,8 @@ public class JeonseService {
         } catch (IOException e) {
             log.error("Error occurred while parsing JSON response", e);
         }
+        jeonse.setFlrInfo(flrInfo);
+
         return AppropriateJeonse.builder()
                 .jeonsePrice(root.path("jeonsePrice").asInt())
                 .infrastructureNum(AppropriateJeonse.InfrastructureNum.builder()
@@ -225,6 +228,7 @@ public class JeonseService {
             String calculatedFloor = switch (firstValue) {
                 case "저" -> String.valueOf((int) Math.round(secondValue / 3.0));
                 case "중" -> String.valueOf((int) Math.round(2 * secondValue / 3.0));
+                case "고" -> String.valueOf(secondValue);
                 default -> firstValue;
             };
 
