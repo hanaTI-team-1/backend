@@ -2,6 +2,7 @@ package kr.ac.kopo.jeonse.domain.jeonse.controller;
 
 import kr.ac.kopo.jeonse.domain.jeonse.dto.InfraDTO;
 import kr.ac.kopo.jeonse.domain.jeonse.dto.JeonseCheckList;
+import kr.ac.kopo.jeonse.domain.jeonse.dto.RecommendRequest;
 import kr.ac.kopo.jeonse.domain.jeonse.service.JeonseService;
 import kr.ac.kopo.jeonse.global.payload.ApiResponse;
 import lombok.RequiredArgsConstructor;
@@ -39,7 +40,7 @@ public class JeonseController {
                 .body(registerDoc);
     }
 
-    @PostMapping("/remain")
+    @GetMapping("/remain")
     public ApiResponse<?> getRemainJeonse(@QueryParam("address") String address,
             @QueryParam("aptName") String aptName) {
         return ApiResponse.onSuccess(jeonseService.getRemainJeonse(address, aptName));
@@ -54,6 +55,13 @@ public class JeonseController {
     public ApiResponse<List<InfraDTO>> infraList() {
         return ApiResponse.onSuccess(jeonseService.getInfraList());
     }
+
+    @GetMapping("/recommend")
+    public ApiResponse<List<JeonseCheckList>> recommend(@RequestBody RecommendRequest recommendRequest) {
+        return ApiResponse.onSuccess(jeonseService.recommendJeonse(recommendRequest));
+    }
+
+
 
 
 }

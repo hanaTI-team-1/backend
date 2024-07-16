@@ -7,6 +7,7 @@ import kr.ac.kopo.jeonse.domain.jeonse.domain.*;
 import kr.ac.kopo.jeonse.domain.jeonse.dto.InfraDTO;
 import kr.ac.kopo.jeonse.domain.jeonse.dto.JeonseCheckList;
 import kr.ac.kopo.jeonse.domain.jeonse.dto.JeonseRateDto;
+import kr.ac.kopo.jeonse.domain.jeonse.dto.RecommendRequest;
 import kr.ac.kopo.jeonse.domain.jeonse.mapper.BuildingRegisterMapper;
 import kr.ac.kopo.jeonse.domain.jeonse.mapper.JeonseMapper;
 import kr.ac.kopo.jeonse.global.utils.NullToEmptyStringUtil;
@@ -122,6 +123,14 @@ public class JeonseService {
         Jeonse jeonse = jeonseMapper.selectJeonseByAtclNo(actlNo);
         JeonseRateDto jeonseRateDto = calculateJeonseRate(actlNo);
 
+        if(jeonseRateDto.getJeonsePrice() == null) {
+            jeonseRateDto.setJeonsePrice("0");
+        }
+//
+//        if (jeonseRateDto.getRate() == null) {
+//            jeonseRateDto.setRate("90");
+//        }
+
         List<BuildingRegister> buildingRegister = buildingRegisterMapper.findBuildingRegisterByAddress(parseAddress(jeonse.getAddress()));
 
         boolean isBuildingRegister = true;
@@ -141,8 +150,9 @@ public class JeonseService {
         return JeonseCheckList.builder()
                 .jeonse(jeonse)
                 .jeonseRate(JeonseCheckList.JeonseRate.builder()
-                        .success(Integer.parseInt(jeonseRateDto.getJeonsePrice()) < 80)
+                        .success(Integer.parseInt(jeonseRateDto.getRate()) < 80)
                         .salePrice(Integer.parseInt(jeonseRateDto.getJeonsePrice()))
+                        .jeonseSaleRate(Float.parseFloat(jeonseRateDto.getRate()))
                         .build())
                 .builderLedger(JeonseCheckList.BuilderLedger.builder()
                         .success(isBuildingRegister)
@@ -159,11 +169,11 @@ public class JeonseService {
                                 .mart(appropriateJeonsePrice.getInfrastructureNum().getMart())
                                 .build())
                         .build())
-                        .certifiedRealEstateAgent(JeonseCheckList.CertifiedRealEstateAgent.builder()
-                                .success(true)
-                                .licensedRealEstateAgent(jeonse.getRltrNm())
-                                .build())
-                        .build();
+                .certifiedRealEstateAgent(JeonseCheckList.CertifiedRealEstateAgent.builder()
+                        .success(true)
+                        .licensedRealEstateAgent(jeonse.getRltrNm())
+                        .build())
+                .build();
     }
 
     private AppropriateJeonse getAppropriateJeonsePrice(Jeonse jeonse) {
@@ -171,6 +181,9 @@ public class JeonseService {
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Content-Type", "application/json");
+
+
+        Jeonse jeonse1 = transformJeonse(jeonse);
 
         HttpEntity<Jeonse> entity = new HttpEntity<>(transformJeonse(jeonse), headers);
 
@@ -201,18 +214,26 @@ public class JeonseService {
         String tmp = jeonse.getFlrInfo();
         String[] flrInfo = tmp.split("/");
         if (flrInfo.length == 1) {
-            jeonse.setFlrInfo(flrInfo[0]);
+            jeonse.setFlrInfo(flrInfo[0]+"/1");
         } else {
             String firstValue = flrInfo[0];
             int secondValue = Integer.parseInt(flrInfo[1]);
-            int calculatedFloor = switch (firstValue) {
-                case "저" -> (int) Math.round(secondValue / 3.0);
-                case "중" -> (int) Math.round(2 * secondValue / 3.0);
-                case "고" -> secondValue;
-                default -> Integer.parseInt(String.valueOf(firstValue.toCharArray()[1])) * -1;
+            if (firstValue.contains("B")) {
+                jeonse.setFlrInfo(Integer.parseInt(String.valueOf(firstValue.toCharArray()[1])) * -1 +"/1");
+                return jeonse;
+            }
+            String calculatedFloor = switch (firstValue) {
+                case "저" -> String.valueOf((int) Math.round(secondValue / 3.0));
+                case "중" -> String.valueOf((int) Math.round(2 * secondValue / 3.0));
+                default -> firstValue;
             };
 
-            jeonse.setFlrInfo(String.valueOf(calculatedFloor));
+            jeonse.setFlrInfo(calculatedFloor + "/1");
+        }
+
+        if(!jeonse.getAddress().contains("-")){
+            jeonse.setAddress(jeonse.getAddress() + "-0");
+
         }
 
         return jeonse;
@@ -292,6 +313,49 @@ public class JeonseService {
                         .longitude(busStop.getLongitude())
                         .build())
                 .collect(Collectors.toList());
+    }
+
+    public List<JeonseCheckList> recommendJeonse(RecommendRequest recommendRequest) {
+//        String[] atclNos = getRecommendationList(recommendRequest);
+
+        String[] atclNos = {"2430006535", "2433524070", "2433775697", "2434392198", "2431314046", "2429677439", "2432722911", "2430296803", "2433186783"};
+
+        List<JeonseCheckList> recommendList = new ArrayList<>();
+
+        for (String atclNo : atclNos) {
+            int tmp = 0;
+            JeonseCheckList jeonseCheckList = checkJeonse(atclNo);
+            if (jeonseCheckList.getJeonseRate().isSuccess()) {
+                tmp++;
+            }
+            if (jeonseCheckList.getBuilderLedger().isSuccess()) {
+                tmp++;
+            }
+            if (jeonseCheckList.getAppropriateJeonsePrice().isSuccess()) {
+                tmp++;
+            }
+            if (jeonseCheckList.getCertifiedRealEstateAgent().isSuccess()) {
+                tmp++;
+            }
+            if (tmp >= 3) {
+                recommendList.add(jeonseCheckList);
+            }
+        }
+
+        return recommendList;
+    }
+
+    private String[] getRecommendationList(RecommendRequest recommendRequest) {
+        final String FLASK_API_URL = "http://34.64.201.85:5000/run-b";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Content-Type", "application/json");
+
+        HttpEntity<RecommendRequest> entity = new HttpEntity<>(recommendRequest, headers);
+
+        ResponseEntity<String[]> response = restTemplate.exchange(FLASK_API_URL, HttpMethod.POST, entity, String[].class);
+
+        return response.getBody();
     }
 }
 
