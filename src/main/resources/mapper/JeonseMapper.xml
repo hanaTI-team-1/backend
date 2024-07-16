@@ -13,7 +13,7 @@
         SELECT * FROM naver_real_estate
         WHERE
             tradtpnm = '전세' and
-            bildnm not null and
+            bildnm is not null and
             address like '%${address}%'
     </select>
 
