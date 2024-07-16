@@ -179,7 +179,7 @@ public class JeonseService {
     }
 
     private AppropriateJeonse getAppropriateJeonsePrice(Jeonse jeonse) {
-        final String FLASK_API_URL = "http://34.64.201.85:5000/run-a";
+        final String FLASK_API_URL = "http://34.64.53.101:5000/run-a";
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Content-Type", "application/json");
@@ -350,7 +350,7 @@ public class JeonseService {
     }
 
     private List<String> getRecommendationList(RecommendRequest recommendRequest) {
-        final String FLASK_API_URL = "http://34.64.201.85:5000/run-b";
+        final String FLASK_API_URL = "http://34.64.53.101:5000/run-b";
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Content-Type", "application/json");
