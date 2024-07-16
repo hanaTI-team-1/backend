@@ -18,6 +18,8 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -320,9 +322,7 @@ public class JeonseService {
     }
 
     public List<JeonseCheckList> recommendJeonse(RecommendRequest recommendRequest) {
-        String[] atclNos = getRecommendationList(recommendRequest);
-
-//        String[] atclNos = {"2430006535", "2433524070", "2433775697", "2434392198", "2431314046", "2429677439", "2432722911", "2430296803", "2433186783"};
+        List<String> atclNos = getRecommendationList(recommendRequest);
 
         List<JeonseCheckList> recommendList = new ArrayList<>();
 
@@ -349,7 +349,7 @@ public class JeonseService {
         return recommendList;
     }
 
-    private String[] getRecommendationList(RecommendRequest recommendRequest) {
+    private List<String> getRecommendationList(RecommendRequest recommendRequest) {
         final String FLASK_API_URL = "http://34.64.201.85:5000/run-b";
 
         HttpHeaders headers = new HttpHeaders();
@@ -357,9 +357,16 @@ public class JeonseService {
 
         HttpEntity<RecommendRequest> entity = new HttpEntity<>(recommendRequest, headers);
 
-        ResponseEntity<String[]> response = restTemplate.exchange(FLASK_API_URL, HttpMethod.POST, entity, String[].class);
+        ResponseEntity<String> response = restTemplate.exchange(FLASK_API_URL, HttpMethod.POST, entity, String.class);
 
-        return response.getBody();
+        String responseBody = response.getBody();
+        JSONObject jsonObject = new JSONObject(responseBody);
+
+        JSONArray jsonArray = jsonObject.getJSONArray("data");
+
+        return jsonArray.toList().stream().map(Object::toString).collect(Collectors.toList());
+
+
     }
 
     public List<Jeonse> getAddressList(String address) {
