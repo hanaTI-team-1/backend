@@ -4,10 +4,7 @@ package kr.ac.kopo.jeonse.domain.jeonse.service;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.ac.kopo.jeonse.domain.jeonse.domain.*;
-import kr.ac.kopo.jeonse.domain.jeonse.dto.InfraDTO;
-import kr.ac.kopo.jeonse.domain.jeonse.dto.JeonseCheckList;
-import kr.ac.kopo.jeonse.domain.jeonse.dto.JeonseRateDto;
-import kr.ac.kopo.jeonse.domain.jeonse.dto.RecommendRequest;
+import kr.ac.kopo.jeonse.domain.jeonse.dto.*;
 import kr.ac.kopo.jeonse.domain.jeonse.mapper.BuildingRegisterMapper;
 import kr.ac.kopo.jeonse.domain.jeonse.mapper.JeonseMapper;
 import kr.ac.kopo.jeonse.global.utils.NullToEmptyStringUtil;
@@ -125,7 +122,7 @@ public class JeonseService {
         Jeonse jeonse = jeonseMapper.selectJeonseByAtclNo(actlNo);
         JeonseRateDto jeonseRateDto = calculateJeonseRate(actlNo);
 
-        if(jeonseRateDto.getJeonsePrice() == null) {
+        if (jeonseRateDto.getJeonsePrice() == null) {
             jeonseRateDto.setJeonsePrice("0");
         }
 
@@ -219,12 +216,12 @@ public class JeonseService {
         String tmp = jeonse.getFlrInfo();
         String[] flrInfo = tmp.split("/");
         if (flrInfo.length == 1) {
-            jeonse.setFlrInfo(flrInfo[0]+"/1");
+            jeonse.setFlrInfo(flrInfo[0] + "/1");
         } else {
             String firstValue = flrInfo[0];
             int secondValue = Integer.parseInt(flrInfo[1]);
             if (firstValue.contains("B")) {
-                jeonse.setFlrInfo(Integer.parseInt(String.valueOf(firstValue.toCharArray()[1])) * -1 +"/1");
+                jeonse.setFlrInfo(Integer.parseInt(String.valueOf(firstValue.toCharArray()[1])) * -1 + "/1");
                 return jeonse;
             }
             String calculatedFloor = switch (firstValue) {
@@ -237,7 +234,7 @@ public class JeonseService {
             jeonse.setFlrInfo(calculatedFloor + "/1");
         }
 
-        if(!jeonse.getAddress().contains("-")){
+        if (!jeonse.getAddress().contains("-")) {
             jeonse.setAddress(jeonse.getAddress() + "-0");
 
         }
@@ -321,8 +318,13 @@ public class JeonseService {
                 .collect(Collectors.toList());
     }
 
-    public List<JeonseCheckList> recommendJeonse(RecommendRequest recommendRequest) {
+    public RecommendResponse recommendJeonse(RecommendRequest recommendRequest) {
         List<String> atclNos = getRecommendationList(recommendRequest);
+
+        RecommendResponse recommendResponse = new RecommendResponse();
+        recommendResponse.setClusterType(atclNos.get(atclNos.size() - 1));
+
+        atclNos.remove(atclNos.size() - 1);
 
         List<JeonseCheckList> recommendList = new ArrayList<>();
 
@@ -345,8 +347,8 @@ public class JeonseService {
                 recommendList.add(jeonseCheckList);
             }
         }
-
-        return recommendList;
+        recommendResponse.setJeonseCheckList(recommendList);
+        return recommendResponse;
     }
 
     private List<String> getRecommendationList(RecommendRequest recommendRequest) {

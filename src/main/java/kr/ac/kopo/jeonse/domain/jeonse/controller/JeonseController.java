@@ -4,6 +4,7 @@ import kr.ac.kopo.jeonse.domain.jeonse.domain.Jeonse;
 import kr.ac.kopo.jeonse.domain.jeonse.dto.InfraDTO;
 import kr.ac.kopo.jeonse.domain.jeonse.dto.JeonseCheckList;
 import kr.ac.kopo.jeonse.domain.jeonse.dto.RecommendRequest;
+import kr.ac.kopo.jeonse.domain.jeonse.dto.RecommendResponse;
 import kr.ac.kopo.jeonse.domain.jeonse.service.JeonseService;
 import kr.ac.kopo.jeonse.global.payload.ApiResponse;
 import lombok.RequiredArgsConstructor;
@@ -58,7 +59,7 @@ public class JeonseController {
     }
 
     @PostMapping("/recommend")
-    public ApiResponse<List<JeonseCheckList>> recommend(@RequestBody RecommendRequest recommendRequest) {
+    public ApiResponse<RecommendResponse> recommend(@RequestBody RecommendRequest recommendRequest) {
         return ApiResponse.onSuccess(jeonseService.recommendJeonse(recommendRequest));
     }
 
