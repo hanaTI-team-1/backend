@@ -71,8 +71,8 @@ public class JeonseService {
         org.apache.http.HttpEntity multipart = builder.build();
         uploadFile.setEntity(multipart);
 
-        // wait 10 seconds
-        TimeUnit.SECONDS.sleep(10);
+        // wait 20 seconds
+        TimeUnit.SECONDS.sleep(20);
 
         CloseableHttpResponse response = httpClient.execute(uploadFile);
         org.apache.http.HttpEntity responseEntity = response.getEntity();
@@ -132,6 +132,13 @@ public class JeonseService {
 
         List<BuildingRegister> buildingRegister = buildingRegisterMapper.findBuildingRegisterByAddress(parseAddress(jeonse.getAddress()));
 
+        String[] parsedAddress = splitAddress(jeonse.getAddress());
+
+        String isViolation = buildingRegisterMapper.findBuildingViolationByAddress(parsedAddress[0], parsedAddress[1], parsedAddress[2], parsedAddress[3]);
+        if(isViolation == null){
+            isViolation = "정상건축물";
+        }
+
         boolean isBuildingRegister = true;
         String buildingRegisterInfo = "";
 
@@ -156,6 +163,7 @@ public class JeonseService {
                 .builderLedger(JeonseCheckList.BuilderLedger.builder()
                         .success(isBuildingRegister)
                         .information(buildingRegisterInfo)
+                        .isViolation(isViolation)
                         .build())
                 .appropriateJeonsePrice(JeonseCheckList.AppropriateJeonsePrice.builder()
                         .success(jeonse.getPrc() < appropriateJeonsePrice.getJeonsePrice())
@@ -174,6 +182,20 @@ public class JeonseService {
                         .build())
                 .build();
     }
+
+    private String[] splitAddress(String address) {
+        String[] addressParts = address.split(" ");
+        String gu = addressParts[1];
+        String dong = addressParts[2];
+        String bunji = addressParts[3];
+        String[] roadNumbers = bunji.split(" ")[0].split("-");
+
+        String bunNumber = String.format("%04d", Integer.parseInt(roadNumbers[0]));
+        String buNumber = roadNumbers.length > 1 ? String.format("%04d", Integer.parseInt(roadNumbers[1])) : "0000";
+
+        return new String[]{gu, dong, bunNumber, buNumber};
+    }
+
 
     private AppropriateJeonse getAppropriateJeonsePrice(Jeonse jeonse) {
         final String FLASK_API_URL = "http://34.64.53.101:5000/run-a";

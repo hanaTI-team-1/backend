@@ -9,4 +9,6 @@ import java.util.List;
 @Mapper
 public interface BuildingRegisterMapper {
     List<BuildingRegister> findBuildingRegisterByAddress(@Param("road_address") String roadAddress);
+
+    String findBuildingViolationByAddress(@Param("gu") String gu, @Param("dong") String dong, @Param("bun") String bun, @Param("bu") String bu);
 }

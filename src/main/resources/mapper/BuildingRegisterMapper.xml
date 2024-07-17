@@ -6,4 +6,14 @@
     <select id="findBuildingRegisterByAddress" resultType="kr.ac.kopo.jeonse.domain.jeonse.domain.BuildingRegister">
         SELECT * FROM BUILDING_REGISTER WHERE LAND_LOCATION LIKE '%${road_address}%'
     </select>
+
+    <select id="findBuildingViolationByAddress" resultType="String">
+        select viol_bld_yn
+        from buildings
+        where sigungu_cd = '${gu}'
+          and bjdong_cd = '${dong}'
+          and bun = '${bun}'
+          and ji = '${bu}'
+          AND ROWNUM = 1
+    </select>
 </mapper>

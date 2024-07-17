@@ -27,6 +27,7 @@ public class JeonseCheckList {
     public static class BuilderLedger {
         private boolean success;
         private String information;
+        private String isViolation;
     }
 
     @Data
