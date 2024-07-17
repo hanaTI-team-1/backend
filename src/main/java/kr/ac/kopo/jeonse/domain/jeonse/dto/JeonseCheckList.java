@@ -56,7 +56,7 @@ public class JeonseCheckList {
             private int school;
             private int publicSecurity;
             private int busStop;
-            private int subway;
+            private float subway;
             private int mart;
         }
     }

@@ -350,7 +350,10 @@ public class JeonseService {
 
         List<JeonseCheckList> recommendList = new ArrayList<>();
 
+        int limitNumber = 0;
+
         for (String atclNo : atclNos) {
+            limitNumber++;
             int tmp = 0;
             JeonseCheckList jeonseCheckList = checkJeonse(atclNo);
             if (jeonseCheckList.getJeonseRate().isSuccess()) {
@@ -367,6 +370,9 @@ public class JeonseService {
             }
             if (tmp >= 3) {
                 recommendList.add(jeonseCheckList);
+            }
+            if (limitNumber == 5) {
+                break;
             }
         }
         recommendResponse.setRecommend(recommendList);
