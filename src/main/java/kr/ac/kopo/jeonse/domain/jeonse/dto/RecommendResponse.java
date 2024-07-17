@@ -7,5 +7,5 @@ import java.util.List;
 @Data
 public class RecommendResponse {
     private String clusterType;
-    private List<JeonseCheckList> jeonseCheckList;
+    private List<JeonseCheckList> recommend;
 }

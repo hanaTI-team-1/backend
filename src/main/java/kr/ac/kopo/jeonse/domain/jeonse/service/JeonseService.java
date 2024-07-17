@@ -369,7 +369,7 @@ public class JeonseService {
                 recommendList.add(jeonseCheckList);
             }
         }
-        recommendResponse.setJeonseCheckList(recommendList);
+        recommendResponse.setRecommend(recommendList);
         return recommendResponse;
     }
 
