@@ -226,7 +226,7 @@ public class JeonseService {
                         .school(root.path("infrastructureScore").path("school").asInt())
                         .publicSecurity(root.path("infrastructureScore").path("publicSecurity").asInt())
                         .busStop(root.path("infrastructureScore").path("busStop").asInt())
-                        .subway(root.path("infrastructureScore").path("subway").asInt())
+                        .subway(Float.parseFloat(root.path("infrastructureScore").path("subway").asText()))
                         .mart(root.path("infrastructureScore").path("mart").asInt())
                         .build())
                 .build();

@@ -21,7 +21,7 @@ public class AppropriateJeonse {
         private int school;
         private int publicSecurity;
         private int busStop;
-        private int subway;
+        private Float subway;
         private int mart;
     }
 }
