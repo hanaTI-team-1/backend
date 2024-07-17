@@ -1,10 +1,6 @@
 package kr.ac.kopo.jeonse.domain.jeonse.controller;
 
-import kr.ac.kopo.jeonse.domain.jeonse.domain.Jeonse;
-import kr.ac.kopo.jeonse.domain.jeonse.dto.InfraDTO;
-import kr.ac.kopo.jeonse.domain.jeonse.dto.JeonseCheckList;
-import kr.ac.kopo.jeonse.domain.jeonse.dto.RecommendRequest;
-import kr.ac.kopo.jeonse.domain.jeonse.dto.RecommendResponse;
+import kr.ac.kopo.jeonse.domain.jeonse.dto.*;
 import kr.ac.kopo.jeonse.domain.jeonse.service.JeonseService;
 import kr.ac.kopo.jeonse.global.payload.ApiResponse;
 import lombok.RequiredArgsConstructor;
@@ -64,7 +60,7 @@ public class JeonseController {
     }
 
     @GetMapping("/address")
-    public ApiResponse<List<Jeonse>> getAddressList(@QueryParam("address") String address) {
+    public ApiResponse<List<QueryResponse>> getAddressList(@QueryParam("address") String address) {
         return ApiResponse.onSuccess(jeonseService.getAddressList(address));
     }
 

@@ -2,6 +2,7 @@ package kr.ac.kopo.jeonse.domain.jeonse.mapper;
 
 import kr.ac.kopo.jeonse.domain.jeonse.domain.*;
 import kr.ac.kopo.jeonse.domain.jeonse.dto.JeonseRateDto;
+import kr.ac.kopo.jeonse.domain.jeonse.dto.QueryResponse;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -27,6 +28,6 @@ public interface JeonseMapper {
 
     float getPrimeRate(@Param("gu") String gu);
 
-    List<Jeonse> getJeonseList(String address);
+    List<QueryResponse> getJeonseList(@Param("address") String address);
 }
 

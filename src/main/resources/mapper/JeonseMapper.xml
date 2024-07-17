@@ -9,12 +9,18 @@
         atclnm = #{aptName}
     </select>
 
-    <select id="getJeonseList" resultType="kr.ac.kopo.jeonse.domain.jeonse.domain.Jeonse">
-        SELECT * FROM naver_real_estate
-        WHERE
-            tradtpnm = '전세' and
-            bildnm is not null and
-            address like '%${address}%'
+    <select id="getJeonseList" resultType="kr.ac.kopo.jeonse.domain.jeonse.dto.QueryResponse">
+        SELECT
+            nre.*,
+            ram.road_address AS address_road
+        FROM
+            (SELECT *
+             FROM naver_real_estate
+             WHERE tradtpnm = '전세'
+               AND bildnm IS NOT NULL
+               AND address LIKE '%${address}%') nre
+                LEFT JOIN road_address_jibun_address_mapping ram
+                          ON nre.address = ram.jibun_address
     </select>
 
     <select id="selectJeonseByAtclNo" resultType="kr.ac.kopo.jeonse.domain.jeonse.domain.Jeonse">

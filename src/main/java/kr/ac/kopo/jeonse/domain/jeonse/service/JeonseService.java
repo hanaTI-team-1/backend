@@ -371,7 +371,7 @@ public class JeonseService {
 
     }
 
-    public List<Jeonse> getAddressList(String address) {
+    public List<QueryResponse> getAddressList(String address) {
         return jeonseMapper.getJeonseList(address);
     }
 }
