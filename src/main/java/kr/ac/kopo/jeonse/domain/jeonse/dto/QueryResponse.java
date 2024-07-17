@@ -52,4 +52,5 @@ public class QueryResponse {
     private String dtlAddr;
     private String address;
     private String addressRoad;
+    private String buildingName;
 }

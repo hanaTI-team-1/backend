@@ -12,7 +12,8 @@
     <select id="getJeonseList" resultType="kr.ac.kopo.jeonse.domain.jeonse.dto.QueryResponse">
         SELECT
             nre.*,
-            ram.road_address AS address_road
+            ram.road_address AS address_road,
+            ram.building_name as building_name
         FROM
             (SELECT *
              FROM naver_real_estate
