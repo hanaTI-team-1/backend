@@ -58,5 +58,6 @@ public class Jeonse {
     private String dtlAddrYn;
     private String dtlAddr;
     private String address;
+    private String addressRoad;
 }
 
