@@ -135,7 +135,7 @@ public class JeonseService {
         String[] parsedAddress = splitAddress(jeonse.getAddress());
 
         String isViolation = buildingRegisterMapper.findBuildingViolationByAddress(parsedAddress[0], parsedAddress[1], parsedAddress[2], parsedAddress[3]);
-        if(isViolation == null){
+        if (isViolation == null) {
             isViolation = "정상건축물";
         }
 
@@ -152,6 +152,10 @@ public class JeonseService {
         }
         AppropriateJeonse appropriateJeonsePrice = getAppropriateJeonsePrice(jeonse);
 
+        boolean isAppropriateJeonsePrice =
+                jeonse.getPrc() >= appropriateJeonsePrice.getJeonsePrice() * 0.9 &&
+                        jeonse.getPrc() <= appropriateJeonsePrice.getJeonsePrice() * 1.1;
+
 
         return JeonseCheckList.builder()
                 .jeonse(jeonse)
@@ -166,7 +170,7 @@ public class JeonseService {
                         .isViolation(isViolation)
                         .build())
                 .appropriateJeonsePrice(JeonseCheckList.AppropriateJeonsePrice.builder()
-                        .success(jeonse.getPrc() < appropriateJeonsePrice.getJeonsePrice())
+                        .success(isAppropriateJeonsePrice)
                         .jeonsePrice(appropriateJeonsePrice.getJeonsePrice())
                         .infrastructureNum(JeonseCheckList.AppropriateJeonsePrice.InfrastructureNum.builder()
                                 .school(appropriateJeonsePrice.getInfrastructureNum().getSchool())
